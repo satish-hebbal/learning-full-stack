@@ -1,4 +1,4 @@
-from flask import Flask, json, jsonify
+from flask import Flask, json, jsonify, request
 
 app = Flask(__name__)
 
@@ -12,9 +12,16 @@ def index():
 
 @app.route("/data")
 def get_data():
+    query_title = request.args.get("title")
     with open("notes.json", "r") as f:
         notes = json.load(f)
-    return jsonify(notes)
+    titles = [note["title"] for note in notes]
+    for title in titles:
+        if query_title == title:
+            return jsonify({"title": notes["title"], "content": notes["content"]})
+    
+    # If no note found
+    return jsonify({"error": "Note not found"}), 404
 
 @app.route("/title")
 def get_titles():
