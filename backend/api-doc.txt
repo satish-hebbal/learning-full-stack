@@ -1,0 +1,113 @@
+Here’s a concise **API documentation** for your Flask Notes app:
+
+---
+
+# **Notes App API Documentation**
+
+**Base URL:** `http://127.0.0.1:5000/`
+
+---
+
+## 1️⃣ Home Route
+
+**Endpoint:** `/`
+**Method:** `GET`
+**Description:** Returns a simple welcome message.
+
+**Response Example:**
+
+```text
+Hello, Flask!
+```
+
+---
+
+## 2️⃣ Index Route
+
+**Endpoint:** `/index`
+**Method:** `GET`
+**Description:** Returns a placeholder message for the `/index` page.
+
+**Response Example:**
+
+```text
+This is the /index page!
+```
+
+---
+
+## 3️⃣ Get Note by Title
+
+**Endpoint:** `/data`
+**Method:** `GET`
+**Query Parameter:** `title` (string) — the title of the note you want to fetch.
+**Description:** Returns the **note matching the given title** (case-insensitive).
+
+**Request Example:**
+
+```
+GET /data?title=Todo
+```
+
+**Success Response:**
+
+* **Status Code:** 200
+* **Body:**
+
+```json
+{
+  "title": "Todo",
+  "content": "Finish Flask project, Call friend"
+}
+```
+
+**Error Responses:**
+
+1. **Missing title parameter**
+
+   * **Status Code:** 400
+   * **Body:**
+
+```json
+{"error": "Please provide a title"}
+```
+
+2. **Title not found**
+
+   * **Status Code:** 404
+   * **Body:**
+
+```json
+{"error": "Note not found"}
+```
+
+---
+
+## 4️⃣ Get All Titles
+
+**Endpoint:** `/title`
+**Method:** `GET`
+**Description:** Returns a JSON list of all note titles in `notes.json`.
+
+**Request Example:**
+
+```
+GET /title
+```
+
+**Response Example:**
+
+```json
+["Shopping List", "Todo", "Ideas"]
+```
+
+---
+
+## Notes
+
+* All data is read from `notes.json` located in the same directory as `app.py`.
+* `/data` is **case-insensitive**, so `todo` or `Todo` will return the same note.
+
+---
+
+If you want, I can also **draw this as a proper Swagger/OpenAPI spec**, so it’s ready for tools like Postman or Swagger UI. Do you want me to do that?
