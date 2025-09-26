@@ -1,6 +1,12 @@
-from flask import Flask, json, jsonify, request
+from flask import Flask, jsonify, request
+import json
+import os
 
 app = Flask(__name__)
+
+# Optional: absolute path to notes.json
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+NOTES_FILE = os.path.join(BASE_DIR, "notes.json")
 
 @app.route("/")
 def home():
@@ -13,19 +19,23 @@ def index():
 @app.route("/data")
 def get_data():
     query_title = request.args.get("title")
-    with open("notes.json", "r") as f:
+    if not query_title:
+        return jsonify({"error": "Please provide a title"}), 400
+
+    with open(NOTES_FILE, "r") as f:
         notes = json.load(f)
-    titles = [note["title"] for note in notes]
-    for title in titles:
-        if query_title == title:
-            return jsonify({"title": notes["title"], "content": notes["content"]})
+    
+    # Search for the note with matching title
+    for note in notes:
+        if note["title"].lower() == query_title.lower():  # case-insensitive match
+            return jsonify({"title": note["title"], "content": note["content"]})
     
     # If no note found
     return jsonify({"error": "Note not found"}), 404
 
 @app.route("/title")
 def get_titles():
-    with open("notes.json", "r") as f:
+    with open(NOTES_FILE, "r") as f:
         notes = json.load(f)
     titles = [note["title"] for note in notes]
     return jsonify(titles)
